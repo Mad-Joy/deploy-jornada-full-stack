@@ -28,12 +28,7 @@ const timeInSeconds = (timeString) => {
   return seconds + minutes * 60;
 };
 
-const Player = ({
-  duration,
-  randomIdFromArtist,
-  randomId2FromArtist,
-  audio,
-}) => {
+const Player = ({ duration, randomId, randomId2, audio }) => {
   // const audioPlayer...
   const audioPlayer = useRef();
   const progressBar = useRef();
@@ -51,6 +46,18 @@ const Player = ({
     setIsPlaying(!isPlaying);
 
     // console.log(formatTime(audioPlayer.current.currentTime));
+  };
+
+  const changeSong = () => {
+    // Alterações no player de áudio
+    audioPlayer.current.pause();
+    setIsPlaying(false);
+    audioPlayer.current.currentTime = 0;
+
+    // Alterações visuais
+    setCurrentTime(formatTime(0));
+    progressBar.current.style.setProperty("--_progress", "0%");
+    // console.log("Tentou mudar a música");
   };
 
   useEffect(() => {
@@ -72,7 +79,7 @@ const Player = ({
   return (
     <div className="player">
       <div className="player__controllers">
-        <Link to={`/song/${randomIdFromArtist}`}>
+        <Link to={`/song/${randomId}`} onClick={() => changeSong()}>
           <FontAwesomeIcon className="player__icon" icon={faBackwardStep} />
         </Link>
 
@@ -82,7 +89,7 @@ const Player = ({
           onClick={() => playPause()}
         />
 
-        <Link to={`/song/${randomId2FromArtist}`}>
+        <Link to={`/song/${randomId2}`} onClick={() => changeSong()}>
           <FontAwesomeIcon className="player__icon" icon={faForwardStep} />
         </Link>
       </div>
